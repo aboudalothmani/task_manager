@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row justify-content-center auth-wrapper">
+    <div class="col-md-8">
+      <div class="auth-card glass-card">
+        <h4 class="mb-3">{% if task %}تعديل المهمة{% else %}إضافة مهمة جديدة{% endif %}</h4>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3 d-flex align-items-center gap-3">
+            <div class="icon-preview" aria-hidden="true">📝</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              {{ form.icon }}
+              {{ form.icon_image }}
+            </div>
+          </div>
+          <!-- مكتبة أيقونات صغيرة للاختيار السريع -->
+          <div class="mb-3">
+            <label class="form-label">اختر أيقونة سريعة</label>
+            <div class="icon-picker d-flex gap-2">
+              <button type="button" class="icon-choice btn btn-sm" data-icon="📝">📝</button>
+              <button type="button" class="icon-choice btn btn-sm" data-icon="✅">✅</button>
+              <button type="button" class="icon-choice btn btn-sm" data-icon="🔥">🔥</button>
+              <button type="button" class="icon-choice btn btn-sm" data-icon="⭐">⭐</button>
+              <button type="button" class="icon-choice btn btn-sm" data-icon="bi-alarm">⏰</button>
+            </div>
+          </div>
+          {{ form.title.label_tag }}
+          {{ form.title }}
+          {{ form.description.label_tag }}
+          {{ form.description }}
+          <div class="form-check mt-3 mb-3">
+            {{ form.completed }} {{ form.completed.label_tag }}
+          </div>
+          <div class="d-grid">
+            <button class="btn btn-cta" type="submit">حفظ</button>
+          </div>
+        </form>
+        <script src="/static/js/task_form.js"></script>
+      </div>
+    </div>
+  </div>
+{% endblock %}

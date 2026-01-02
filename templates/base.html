@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>نظام إدارة المهام — Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+  <body>
+    <div class="app-root">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-top text-center">
+          <div class="profile">
+            <div class="avatar">{{ user.username|first|upper }}</div>
+            {% if user.is_authenticated %}
+            <div class="profile-name">{{ user.username }}</div>
+            {% else %}
+            <div class="profile-name">زائر</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="{% url 'tasks:task_list' %}" class="nav-item {% if request.path == '/' %}active{% endif %}">
+            <i class="bi bi-list-check"></i>
+            <span>مهامي</span>
+          </a>
+          <a href="{% url 'tasks:task_create' %}" class="nav-item {% if request.path == '/task/add/' %}active{% endif %}">
+            <i class="bi bi-plus-circle"></i>
+            <span>إضافة مهمة</span>
+          </a>
+          <a href="/admin/" class="nav-item">
+            <i class="bi bi-speedometer2"></i>
+            <span>لوحة الإدارة</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-cta">
+          <div class="cta-card">
+            <h6>ابدأ الآن</h6>
+            <p>أضف مهمتك اليومية وابقَ منظماً.</p>
+            <a class="btn btn-cta" href="{% url 'tasks:task_create' %}">إنشاء مهمة</a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main-area">
+        <header class="main-header d-flex justify-content-between align-items-center">
+          <h1 class="app-title">لوحة القيادة</h1>
+          <div class="header-actions d-flex align-items-center">
+            {% if messages %}
+              <div class="messages me-3">
+                {% for message in messages %}
+                  <div class="msg toast">{{ message }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <div class="user-actions d-flex align-items-center">
+              <span class="user-name me-3">{{ user.username }}</span>
+              <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-ghost">تسجيل الخروج</button>
+              </form>
+            </div>
+            {% else %}
+              <a class="btn btn-sm btn-outline-light" href="{% url 'login' %}">تسجيل الدخول</a>
+            {% endif %}
+          </div>
+        </header>
+
+        <section class="main-content">
+          {% block content %}{% endblock %}
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
